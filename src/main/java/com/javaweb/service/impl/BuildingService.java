@@ -117,7 +117,7 @@ public class BuildingService implements IBuildingService {
         }
 
         // Update building entity fields from DTO
-        buildingEntity = buildingConverter.DTOtoBuildingEntity(buildingDTO);
+        buildingConverter.DTOtoBuildingEntity(buildingDTO, buildingEntity);
 
         // Rent areas
         if (buildingDTO.getRentArea() != null && !buildingDTO.getRentArea().trim().isEmpty()) {
@@ -152,9 +152,6 @@ public class BuildingService implements IBuildingService {
                 saveThumbnail(buildingDTO, buildingEntity);
             } else if (buildingDTO.getId() == null) {
                 saveThumbnail(buildingDTO, buildingEntity);
-            } else {
-                String imgPath = buildingRepository.findById(buildingDTO.getId()).get().getImage();
-                buildingEntity.setImage(imgPath);
             }
 
             buildingRepository.save(buildingEntity);
@@ -163,9 +160,7 @@ public class BuildingService implements IBuildingService {
         } catch (Exception e) {
             return e.getMessage();
         }
-
     }
-
 
     @Override
     public BuildingDTO editBuilding(Long id) {
@@ -175,14 +170,11 @@ public class BuildingService implements IBuildingService {
 
     @Override
     public void deleteBuildings(List<Long> ids) {
-
-        // TODO: for loop cho ids và xóa hết mấy cái assignment building dựa trên id xong cho bay màu như dòng dưới
         for (Long id : ids) {
             BuildingEntity buildingEntity = buildingRepository.findById(id).get();
             if (buildingEntity != null) {
                 // Clear the users associated with the building
                 buildingEntity.getUsers().clear();
-                buildingRepository.save(buildingEntity);
             }
         }
 
@@ -204,14 +196,16 @@ public class BuildingService implements IBuildingService {
 
             if (buildingEntity != null) {
                 buildingEntity.getUsers().clear();
+                List<UserEntity> users = new ArrayList<>();
 
                 if (!assignmentBuildingDTO.getStaffs().isEmpty()) {
                     for (Long id : assignmentBuildingDTO.getStaffs()) {
                         UserEntity userEntity = userRepository.findById(id).get();
                         if (userEntity != null) {
-                            buildingEntity.addUser(userEntity);
+                            users.add(userEntity);
                         }
                     }
+                    buildingEntity.setUsers(users);
                 }
 
                 buildingRepository.save(buildingEntity);

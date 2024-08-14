@@ -30,13 +30,15 @@ public class BuildingConverter {
         return dto;
     }
 
-    public BuildingEntity DTOtoBuildingEntity(BuildingDTO buildingDTO) {
+    public void DTOtoBuildingEntity(BuildingDTO buildingDTO, BuildingEntity buildingEntity) {
+        if (buildingDTO.getId() != null){
+            buildingDTO.setImage(buildingEntity.getImage());
+        }
         // Map basic info
-        BuildingEntity buildingEntity = modelMapper.map(buildingDTO, BuildingEntity.class);
+        modelMapper.map(buildingDTO, buildingEntity);
         List<String> typeCode = buildingDTO.getTypeCode();
         buildingEntity.setType(String.join(",", typeCode));
         buildingEntity.setImage(buildingDTO.getImage());
-        return buildingEntity;
     }
 
     public BuildingDTO BuildingEntityToDTO(BuildingEntity buildingEntity) {

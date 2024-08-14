@@ -114,9 +114,4 @@ public class BuildingEntity extends BaseEntity {
     )
     private List<UserEntity> users = new ArrayList<>();
 
-
-    public void addUser(UserEntity user) {
-        this.users.add(user);
-        user.getBuildings().add(this);
-    }
 }

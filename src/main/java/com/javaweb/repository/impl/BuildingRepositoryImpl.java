@@ -2,7 +2,7 @@ package com.javaweb.repository.impl;
 
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.model.request.BuildingSearchRequest;
-import com.javaweb.repository.BuildingRepositoryCustom;
+import com.javaweb.repository.custom.BuildingRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
